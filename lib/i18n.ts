@@ -11,24 +11,32 @@ export function normalizeLanguage(value: unknown): Language {
   return raw === 'zh' || raw === 'es' ? raw : 'en';
 }
 
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+export function assetPath(path: string) {
+  return `${basePath}${path}`;
+}
+
 export function withLanguage(href: string, language: Language) {
-  if (language === 'en') return href;
+  const prefixBasePath = (path: string) => (path.startsWith('/') ? `${basePath}${path}` : path);
+
+  if (language === 'en') return prefixBasePath(href);
   const separator = href.includes('?') ? '&' : '?';
   const hashIndex = href.indexOf('#');
 
   if (hashIndex >= 0) {
     const base = href.slice(0, hashIndex) || '/';
     const hash = href.slice(hashIndex);
-    return `${base}${separator}lang=${language}${hash}`;
+    return prefixBasePath(`${base}${separator}lang=${language}${hash}`);
   }
 
-  return `${href}${separator}lang=${language}`;
+  return prefixBasePath(`${href}${separator}lang=${language}`);
 }
 
 export const schedulerUrl =
   'https://inspectionsupport.com/goldenscopeinspection/online-scheduler/34e96c67-a7d8-11eb-8e29-0a4ef934752f';
 
-export const companyLogo = '/assets/goldenscope-logo.svg';
+export const companyLogo = assetPath('/assets/goldenscope-logo.svg');
 
 export const copy = {
   en: {

@@ -1,4 +1,7 @@
+'use client';
+
 import type { CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BadgeCheck,
   CalendarCheck,
@@ -21,10 +24,10 @@ import {
   Wrench,
 } from 'lucide-react';
 import { teamMembers } from '@/lib/team';
-import { companyLogo, copy, languages, normalizeLanguage, schedulerUrl, withLanguage } from '@/lib/i18n';
+import { assetPath, companyLogo, copy, languages, normalizeLanguage, schedulerUrl, withLanguage } from '@/lib/i18n';
 
-const heroImage = '/assets/hero-owner-kitchen.png';
-const certificationLogos = Array.from({ length: 9 }, (_, index) => `/assets/cert-logo-${index + 1}.png`);
+const heroImage = assetPath('/assets/hero-owner-kitchen.png');
+const certificationLogos = Array.from({ length: 9 }, (_, index) => assetPath(`/assets/cert-logo-${index + 1}.png`));
 const valueIcons = [Clock3, MapPin, ShieldCheck] as const;
 const serviceIcons = [Gauge, Home, Plug, Flame, Droplets, HardHat, Sprout, Wrench] as const;
 
@@ -131,13 +134,13 @@ const originalSiteContent = {
   },
 } as const;
 
-type PageProps = {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-};
+export default function HomePage() {
+  const [lang, setLang] = useState(() => normalizeLanguage(undefined));
 
-export default async function HomePage({ searchParams }: PageProps) {
-  const params = await searchParams;
-  const lang = normalizeLanguage(params?.lang);
+  useEffect(() => {
+    setLang(normalizeLanguage(new URLSearchParams(window.location.search).get('lang')));
+  }, []);
+
   const t = copy[lang];
   const original = originalSiteContent[lang];
   const navHref = (hash: string) => withLanguage(`/${hash}`, lang);
@@ -156,7 +159,7 @@ export default async function HomePage({ searchParams }: PageProps) {
           <a href={navHref('#services')}>{t.nav.services}</a>
           <a href={navHref('#contact')}>{t.nav.contact}</a>
         </nav>
-        <a className="header-cta" href="tel:+183****1911">
+        <a className="header-cta" href="tel:+18329911911">
           <Phone size={16} /> {t.nav.call}
         </a>
         <nav className="language-toggle" aria-label={t.nav.languageLabel}>
@@ -192,7 +195,7 @@ export default async function HomePage({ searchParams }: PageProps) {
               <a className="button primary" href={schedulerUrl} target="_blank" rel="noreferrer">
                 {t.hero.book}
               </a>
-              <a className="button secondary" href="tel:+183****1911">
+              <a className="button secondary" href="tel:+18329911911">
                 <Phone size={18} /> (832) 991-1911
               </a>
             </div>
@@ -329,7 +332,7 @@ export default async function HomePage({ searchParams }: PageProps) {
             <h2>{t.contact.title}</h2>
             <p>{t.contact.text}</p>
             <div className="contact-card contact-info-card">
-              <a href="tel:+183****1911"><Phone /> (832) 991-1911</a>
+              <a href="tel:+18329911911"><Phone /> (832) 991-1911</a>
               <a href="mailto:GoldenScopeInspection@gmail.com"><Mail /> Goldenscopeinspection@gmail.com</a>
               <span><Clock3 /> {t.contact.hours}</span>
               <span><MapPin /> {t.contact.location}</span>
