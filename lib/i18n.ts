@@ -2,7 +2,7 @@ export type Language = 'en' | 'zh' | 'es';
 
 export const languages: Array<{ code: Language; label: string; shortLabel: string }> = [
   { code: 'en', label: 'English', shortLabel: 'EN' },
-  { code: 'zh', label: 'Chinese', shortLabel: '中文' },
+  { code: 'zh', label: 'Chinese', shortLabel: 'ZH' },
   { code: 'es', label: 'Spanish', shortLabel: 'ES' },
 ];
 
